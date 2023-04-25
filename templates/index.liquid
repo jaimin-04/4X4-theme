@@ -1,0 +1,26 @@
+{%- if settings.enable_left_column -%}
+  {% comment %} {%- section 'slideshow-left-column' -%} {% endcomment %}
+  {%- case settings.static_slideshow -%}
+    {%- when 'banner' -%}
+      {%- section 'slideshow-with-banner' -%}
+    {%- when 'countdown' -%}
+      {%- section 'slideshow-with-countdown' -%}
+    {%- when 'menu' -%}
+      {%- section 'slideshow-with-menu' -%}
+    {%- when 'default' -%}
+      {%- section 'section-slideshow' -%}
+  {%- endcase -%}
+  <div class="container">
+    {% comment %} {%- section 'slideshow-with-banner' -%} {% endcomment %}
+    <div class="row">
+      <div class="col-3 d-none d-lg-block">
+        {%- section 'section-left-column' -%}
+      </div>
+      <div class="col-12 col-lg-9">
+        {{ content_for_index }}
+      </div>
+    </div>
+  </div>
+{%- else -%}
+  {{ content_for_index }}
+{%- endif -%}

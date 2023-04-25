@@ -1,0 +1,17 @@
+{%- include 'blog-layout-template' -%}
+<script>
+  document.addEvent('common.js loaded', () => {
+    let openDrawerButton = document.querySelector('.js-drawer-open');
+    let drawerContainer = document.getElementById('sidebarDrawer');
+    if(!!openDrawerButton){
+      openDrawerButton.addEvent('click', () => {
+        drawerContainer.addClass('is-open');
+        AT.disableScroll();
+      });
+      drawerContainer.querySelectorAll('.js-drawer-close').addEvents('click', () => {
+        drawerContainer.removeClass('is-open');
+        AT.enableScroll();
+      })
+    }
+  })
+</script>

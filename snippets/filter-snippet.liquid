@@ -1,0 +1,155 @@
+{% liquid
+    assign filter_title_1 = settings.filter_title_1
+    assign filter_title_2 = settings.filter_title_2
+    assign filter_title_3 = settings.filter_title_3
+    assign filter_data = settings.filter_data | split: ','
+    assign array = '' | split: ','
+%}
+
+{%- for file in filter_data -%}
+    {%- assign url = file | file_url | split: '[>.0]' -%}
+    {%- assign array = array | concat: url -%}
+{%- endfor -%}
+
+{% assign json = '[' %}
+{% assign escape_char = '"' %}
+{% for make in linklists['select-menu'].links %}
+
+    {% assign json = json | append: '{' | append: escape_char | append: 'name' | append: escape_char | append: ':' %}
+    {% assign json = json | append: escape_char | append: make.title | append: escape_char %}
+
+    {% unless make.links.size != 0 and make.links.links.size != 0 %}{% assign json = json | append: '}' | append: ',' %}{% continue %}{% endunless %}
+
+    {% assign json = json | append: ',' | append: escape_char | append: 'field_2' | append: escape_char | append: ':[' %}
+    {% for model in make.links %}
+        {% assign json = json | append: '{' | append: escape_char | append: 'name' | append: escape_char | append: ':' %}
+        {% assign json = json | append: escape_char | append: model.title | append: escape_char %}
+
+        {% unless model.links.size != 0 %}{% assign json = json | append: '}' | append: ',' %}{% continue %}{% endunless %}
+
+        {% assign json = json | append: ',' | append: escape_char | append: 'field_3' | append: escape_char | append: ':[' %}
+        {% for year in model.links %}
+            {% assign json = json | append: escape_char | append: year.title | append: escape_char | append: ',' %}
+        {% endfor %}
+        {% assign json = json | append: ']' %}
+
+        {% assign json = json | append: '}' | append: ',' %}
+    {% endfor %}
+    {% assign json = json | append: ']' %}
+
+    {% assign json = json | append: '}' | append: ',' %}
+{% endfor %}
+{% assign json = json | append: ']' | replace: '},]', '}]' | replace: ',]', ']' | escape %}
+
+<div class="chosen-wrapper js-filter-container" data-urls="{{ array | join: ',' }}"
+     data-collection-position="{{ settings.filter_collection_position }}" data-json="{{ json | json_string }}">
+
+    <label class="form-label text-center">
+        <h4 class="title">Select Your Vehicle</h4>
+        <p class="description">To View product</p>
+    </label>
+
+
+    <div class="chosen-container active" id="make-dd" data-field-index="1" data-value="">
+        <a class="chosen-single">
+            <span class='chosen-order'>1</span>
+            <span class="js-title" data-placeholder="make">{{ filter_title_1 }}</span>
+            {%- render 'svg' type: 'angle-down' -%}
+        </a>
+        <div class="chosen-drop">
+            <div class="chosen-search"><input type="text" autocomplete="off" name="search"/></div>
+            <ul class="chosen-results" id="make">
+                {% comment %} <li class="active-result result-selected" data-option-array-index="0" style="">{{filter_title_1}}</li> {% endcomment %}
+            </ul>
+        </div>
+    </div>
+    <div class="chosen-container" id="model-dd" data-field-index="2" data-value="">
+        <a class="chosen-single">
+            <span class='chosen-order'>2</span>
+            <span class="js-title" data-placeholder="{{ filter_title_2 }}">{{ filter_title_2 }}</span>
+            {%- render 'svg' type: 'angle-down' -%}
+        </a>
+        <div class="chosen-drop">
+            <div class="chosen-search"><input type="text" autocomplete="off" name="search"/></div>
+            <ul class="chosen-results">
+                {% comment %} <li class="active-result result-selected" data-option-array-index="0" style="">{{filter_title_2}}</li> {% endcomment %}
+            </ul>
+        </div>
+    </div>
+    <div class="chosen-container" id="year-dd" data-field-index="3" data-value="">
+        <a class="chosen-single" data-target="chosen-drop-{{ section.id }}-3">
+            <span class='chosen-order'>3</span>
+            <span class="js-title" data-placeholder="{{ filter_title_3 }}">{{ filter_title_3 }}</span>
+            {%- render 'svg' type: 'angle-down' -%}
+        </a>
+        <div class="chosen-drop">
+            <div class="chosen-search"><input type="text" autocomplete="off" name="search"/></div>
+            <ul class="chosen-results">
+                {% comment %} <li class="active-result result-selected" data-option-array-index="0" style="">{{filter_title_3}}</li> {% endcomment %}
+            </ul>
+        </div>
+    </div>
+    <div class="chosen-btn">
+        <a href="#" onclick="return false" class="btn btn-1 js-btn-submit">
+            {% comment %} {%- render 'svg' type: 'search' -%} {% endcomment %}
+            <span>{{ 'section.single_banner_with_filter.search' | t }}</span>
+
+        </a>
+        <a href="#" onclick="return false"
+           class="btn-reset js-btn-reset">{{ 'section.single_banner_with_filter.reset' | t }}</a>
+    </div>
+</div>
+
+<h4 class="text-center ">OR</h4>
+<div class="chosen-wrapper js-filter-container justify-content-center">
+
+    <label class="form-label text-center">
+        <h4 class="title">Search by</h4>
+        <p class="description">plate and state</p>
+    </label>
+
+    <input style="background: white; margin-left: 7px" class="col-3" type="text" id="plate" placeholder="Plate">
+    <select name="state" style="background: white;margin-left: 7px" class="col-3" id="state">
+        <option value="Select Your State" disabled="disabled" selected="selected">Select Your State</option>
+        <option value="ACT">Australian Capital Territory</option>
+        <option value="NSW">New South Wales</option>
+        <option value="NT">Northern Territory</option>
+        <option value="QLD">Queensland</option>
+        <option value="SA">South Australia</option>
+        <option value="TAS">Tasmania</option>
+        <option value="VIC">Victoria</option>
+        <option value="WA">Western Australia</option>
+    </select>
+    <div class="chosen-btn">
+        <a id="search_by_plate" style="margin-left: 7px" class="btn btn-1 js-btn-submit">Go</a>
+        <a id="reset_plate" class="btn-reset js-btn-reset" type="reset">Reset</a>
+    </div>
+</div>
+
+<script>
+    $("#reset_plate").on('click', function(){
+
+        $("#state").val($("#state option:first").val()).change();
+        $("#state option:first").attr('disabled', 'disabled');
+        $("#plate").val("");
+
+    });
+
+    $("#search_by_plate").on('click', function(){
+
+        var plateValue = $("#plate").val();
+        var stateValue = $("#state").val();
+
+        fetch("https://jaimin.dakshyafreondtech.com/api/get-tags/" + plateValue + "/" + stateValue)
+            .then(res=> {
+                if(res.status == "200"){
+                    return res.text()
+                }else{
+                    console.log("data not found");
+                    return "";
+                }})
+            .then((response) => {
+                location.assign("/collections/all/" + response + "?view=main-collection-product-grid")
+            })
+    });
+</script>

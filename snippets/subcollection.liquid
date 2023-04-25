@@ -1,0 +1,34 @@
+{% liquid
+  assign currentCollection = collection
+  assign menu = linklists['subcollection'].links | where: 'handle', collection.handle | first
+  assign collections = collection
+
+  assign tagHandle = current_tags | join: ' '
+  if request.design_mode
+    echo tagHandle | prepend: '<p>' | append: '</p>'
+  endif
+  assign menu = menu.links | where: 'title', tagHandle | first
+  assign all_menu = collection.all_tags
+%}
+
+<div id="id1:" style="display: none;">{{ tagHandle }}</div>
+
+{%- if menu == blank or menu.links.size == 0 -%}{%- break -%}{%- endif -%}
+
+{%- for link in menu.links -%}
+  {%- assign collection = link.object -%}
+  
+  {%- unless link.type == 'collection_link' and collection.products_count > 0  -%}{%- continue -%}{%- endunless -%}
+  <div class="subcollection-item js-collection" style="display: none;">
+    <br><br>
+    <div class="subcollection-title d-md-flex justify-content-between">
+      <h3>{{ link.title }}</h3>
+      <a href="{{ link.url }}" class="btn btn-1">Show more</a>
+    </div>
+<br>
+  <div class="subcollection-product-list {% render 'grid-class' value: items_resp %} grid-gap-md-30 grid-gap-15 js-collection-ajax" data-url="{{ link.url }}?section_id={{ section.id }}&limit=4"></div>
+  </div>
+  <br>
+{%- endfor -%}
+
+<script src="{{ 'collection-subcollection.js' | asset_url }}" defer></script>

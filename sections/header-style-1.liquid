@@ -1,0 +1,249 @@
+{%- liquid
+  if section.settings.boxed_layout
+    assign is_boxed = true
+  endif
+  assign logo_type = section.settings.logo_type
+  assign helpline  = section.settings.helpline
+  assign vertical_menu   = section.settings.vertical_menu
+  assign vertical_active = section.settings.vertical_active
+  assign horizontal_menu = section.settings.horizontal_menu | default: 'main-menu'
+-%}
+
+<div class="header-container {%if section.settings.uppercase -%} uppercase {%- endif -%}" data-section-type="header" data-section-id="{{section.id}}">
+  <div class="header-style-1">
+
+   
+    <div class="header-content">
+
+       {%- include 'header-style-old' -%}
+
+      <div data-setting="old-header" style="display:none">
+      {%- include 'header-snippets' type: 'mobile' -%}
+      <template id="header-desktop-template">
+        {%- include 'header-snippets' type: 'desktop-1' -%}
+      </template>
+      </div>
+    </div>
+    {%- include 'header-snippets' type: 'sublinks-template' -%}
+
+    
+  </div>
+</div>
+<style>
+  {%- render 'css-responsive' preClassID: '.header-container', classID: ' .header-logo',
+    value_1: section.settings.logo_max_width, property_1: 'width' -%}
+</style>
+
+{% comment %} compress {% endcomment %}
+
+{% schema %}
+{
+  "name": {
+    "en": "Header"
+  },
+  "tag": "section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": {
+        "en": "Please see [instruction](https://support.arenacommerce.com/a/solutions/articles/6000246596) before use."
+      }
+    },
+    {
+      "type": "checkbox",
+      "id": "boxed_layout",
+      "label": {
+        "en": "Boxed layout"
+      },
+      "default": true
+    },
+    {
+      "type" : "checkbox",
+      "id" : "uppercase",
+      "label" : {
+        "en": "Uppercase navigation"
+      }
+    },
+    {
+      "type": "header",
+      "content": {
+        "en": "Logo"
+      }
+    },
+    {
+      "type": "select",
+      "id": "logo_type",
+      "label": {
+        "en": "Logo type"
+      },
+      "options": [
+        {
+          "value": "image",
+          "label": {
+            "en": "Image"
+          }
+        },
+        {
+          "value": "svg",
+          "label": {
+            "en": "SVG"
+          }
+        }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "text",
+      "id": "logo_max_width",
+      "label": {
+        "en": "Max width (Unit: 'px')"
+      },
+      "info": {
+        "en": "Order: Desktop, tablet, mobile"
+      },
+      "default" : "200px,200px,200px"
+    },
+    {
+      "type": "image_picker",
+      "id": "logo_img",
+      "label": {
+        "en": "Logo"
+      }
+    },
+    {
+      "type": "textarea",
+      "id": "logo_svg",
+      "label": {
+        "en": "Logo SVG"
+      },
+      "info": {
+        "en": "Please enter SVG code."
+      }
+    },
+    {
+      "type": "header",
+      "content": {
+        "en": "Vertical menu settings"
+      }
+    },
+    {
+      "type" : "checkbox",
+      "id" : "vertical_active",
+      "label" : {
+        "en": "Always show on homepage."
+      },
+      "default": false
+    },
+    {
+      "type": "link_list",
+      "id": "vertical_menu",
+      "label": {
+        "en": "Vertical menu"
+      }
+    },{
+      "type": "header",
+      "content": {
+        "en": "Right Header Content"
+      }
+    },
+    {
+      "type": "text",
+      "id": "right_heading_1",
+      "label": "Right Heading 1",
+      "default":"Contact us"
+    },
+    {
+      "type": "url",
+      "id": "right_heading_url_1",
+      "label": "Right Heading URL 1"
+    },
+    {
+      "type": "text",
+      "id": "right_heading_2",
+      "label": "Right Heading 2",
+      "default":"About us"
+    },
+    {
+      "type": "url",
+      "id": "right_heading_url_2",
+      "label": "Right Heading URL 2"
+    },
+    {
+      "type": "link_list",
+      "id": "right_menu",
+      "label": "Right Menu"
+    },
+    {
+      "type": "header",
+      "content": {
+        "en": "Horizontal menu settings"
+      }
+    },
+    {
+      "type": "link_list",
+      "id": "horizontal_menu",
+      "label": {
+        "en": "Horizontal menu"
+      }
+    },
+    {
+      "type": "header",
+      "content": {
+        "en": "Helpline"
+      }
+    },
+    {
+      "type": "text",
+      "id": "helpline",
+      "label": {
+        "en": "Helpline"
+      },
+      "default": "(+800) 123 456 7890"
+    },
+    {
+      "type": "text",
+      "id": "office_hrs",
+      "label": {
+        "en": "Office Hours"
+      },
+      "default": "Mon - Fri 8:30-5:00 Sat 9:00-1:00"
+    },
+    {
+      "type": "header",
+      "content": {
+        "en": "New label"
+      }
+    },
+    {
+      "type": "paragraph",
+      "content": {
+        "en": "To use. When add a link, please add (new) in last. E.g: Shop (new)"
+      }
+    },
+    {
+      "type": "header",
+      "content": {
+        "en": "Hot label"
+      }
+    },
+    {
+      "type": "paragraph",
+      "content": {
+        "en": "To use. When add a link, please add (hot) in last. E.g: Shop (hot)"
+      }
+    },
+    {
+      "type": "header",
+      "content": {
+        "en": "Sale label"
+      }
+    },
+    {
+      "type": "paragraph",
+      "content": {
+        "en": "To use. When add a link, please add (sale) in last. E.g: Shop (sale)"
+      }
+    }
+  ]
+}
+{% endschema %}

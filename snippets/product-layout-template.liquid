@@ -1,0 +1,66 @@
+{%- liquid
+	if type == blank
+		assign type = settings.product_page
+	endif
+	assign show_recently_viewed = settings.show_recently_viewed
+	assign recently_viewed_except = settings.recently_viewed_except | split: ','
+	assign current_template = template.suffix | default: type
+-%}
+
+{%- for item in recently_viewed_except -%}
+	{%- assign item_handle = item | handle -%}
+	{%- if current_template == item_handle -%}
+		{%- assign show_recently_viewed = false -%}
+	{%- endif -%}
+{%- endfor -%}
+
+
+{%- case type -%}
+	{%- when 'default' -%}
+		<div class="container">
+			{%- section 'product-template' -%}
+			{%- section 'product-recommendation' -%}
+			{%- if show_recently_viewed -%}
+				{%- section 'section-recently-viewed' -%}
+			{%- endif -%}
+		</div>
+	{% comment %} end {% endcomment %}
+
+	{%- when 'pre-order' -%}
+		<div class="container">
+			{%- section 'product-template' -%}
+			{%- section 'product-recommendation' -%}
+		</div>
+	{% comment %} end {% endcomment %}
+
+	{%- when 'with-sidebar' -%}
+		<div class="container">
+			<div class="row">
+				<div class="col-12 col-lg-8 col-xl-9">
+					{%- section 'product-template' -%}
+					{%- section 'product-recommendation' -%}
+					{%- if show_recently_viewed -%}
+						{%- section 'section-recently-viewed' -%}
+					{%- endif -%}
+				</div>
+				<div class="col-12 col-lg-4 col-xl-3">
+					{%- section 'product-sidebar' -%}
+				</div>
+			</div>
+		</div>
+	{% comment %} end {% endcomment %}
+
+	{%- when 'no-sidebar' -%}
+		{%- section 'product-template' -%}
+		{%- section 'product-recommendation' -%}
+		{%- if show_recently_viewed -%}
+			{%- section 'section-recently-viewed' -%}
+		{%- endif -%}
+	{% comment %} end {% endcomment %}
+
+{%- endcase -%}
+{%- render 'snippet-product-zoom'  -%}
+
+{% comment %} compress {% endcomment %}
+
+<script>window.theme = Object.assign(window.theme || {}, {productHandle: {{product.handle | json}} })</script>

@@ -1,0 +1,179 @@
+<header>
+      <div class="container">
+        <div class="menu-content">
+           <div class="menu-btn">
+              <a href="#" class="menu-open">
+                <div class="mobileMenu-toggleIconfull">
+                  <span class="mobileMenu-toggleIcon"></span>
+                  <span class="mobileMenu-toggleIcon"></span>
+                  <span class="mobileMenu-toggleIcon"></span>
+                </div>
+                menu
+              </a>
+              <a href="#" class="menu-close">
+                <div class="mobileMenu-toggleIconfull">
+                  <span class="mobileMenu-toggleIcon"></span>
+                  <span class="mobileMenu-toggleIcon"></span>
+                  <span class="mobileMenu-toggleIcon"></span>
+                </div>
+                menu
+              </a>
+           </div>
+        </div>
+        <div class="logo-content">
+           {%- include 'header-snippets' type: 'logo' -%}
+        </div>
+
+        <div class="contact-menu">
+          <div class="items item--office">
+            {%- include 'header-snippets' type: 'helpline'  -%}
+            
+           
+             <p class="office-hours">{{ section.settings.office_hrs }}</p>
+          </div>
+          <div class="search-menu">
+            <div class="desktop-search">
+              {%- include 'header-snippets' type: 'form-search' -%}
+            </div>
+          </div>
+        </div>
+
+        <div class="short-menu">
+          <ul>
+            <li><a href="{{ section.settings.right_heading_url_1 }}">{{ section.settings.right_heading_1 }}</a></li>
+            <li>
+              <a href="{{ section.settings.right_heading_url_2 }}">{{ section.settings.right_heading_2 }} 
+                <img src="https://cdn.shopify.com/s/files/1/0650/1829/8612/files/submenu.png">
+              </a>
+              <ul class="submenu-short">
+                {%- for link in linklists[section.settings.right_menu].links -%}
+                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                  {% endfor %}
+              </ul>
+            </li>
+          </ul>
+        </div>
+
+        
+
+
+        <div class="cart-menu">
+          <div class="mobile-search-menu header-search-wrapper">
+          <span class="search-main">
+            <img src="https://cdn.shopify.com/s/files/1/0650/1829/8612/files/searc-mobile-main.png">
+          </span>
+          <div class="search-form-main">
+             {%- include 'header-snippets' type: 'form-search' -%}
+          </div>
+        </div>
+        
+          <div class="drive-menu">
+            <img src="https://cdn.shopify.com/s/files/1/0650/1829/8612/files/card-menu.png">
+          </div>
+
+          <div class="items item--cart themevale_cart">
+              <div class="navUser-action navUser-action-price">
+                  <p class="navUser-item-price">My Cart: <span class="cart-total-grandTotal avisplus-cart-total">{{ cart.total_price | money }}</span></p>
+              </div>
+
+            {%- render 'header-snippets' type: 'cart-3' -%}
+
+          </div>
+        </div>
+      </div>
+
+
+      <div class="main-menu-sec">
+        <ul class="in-menu-item">
+
+        {%- for link in linklists[vertical_menu].links -%}
+{%- assign title = link.title | replace: '(new)' | replace: '(hot)' | replace: '(sale)' | strip -%}
+        <li class="first-submenu" id="first-{{title | handle }}">
+            <a href="{{link.url}}">{{title}}</a>
+
+          {% if link.links != blank %}
+            <span data-id="{{title | handle }}" class="submenu-btn">{%- render 'svg' type: 'angle-right' -%}</span>
+            <div class="submenu-design-item">
+              <ul class="top-heading">
+                <li><a data-id="{{title | handle }}" href="#" class="close-submenu {{title | handle }}">{%- render 'svg' type: 'angle-left' -%} Back</a></li>
+                <li><a href="#">{{title}}</a></li>
+              </ul>
+              <ul class="submenu-items" id="{{title | handle }}">
+                {%- for childlink in link.links -%}
+                <li><a href="{{ childlink.url }}">{{ childlink.title }} </a></li>
+                  {% endfor %}
+              </ul>
+            </div>
+{% endif %}
+
+          
+          </li>
+
+					{%- endfor -%}
+          
+
+        </ul>
+
+
+        <div class="btn-social-sec">
+          <ul class="wish-list-com">
+            {% comment %}<li><a href="#"><img src="https://cdn.shopify.com/s/files/1/0650/1829/8612/files/cart-icons.png"> Wish Lists</a></li>{% endcomment %} 
+            <li><a href="https://www.google.com/maps/place/Aussie+Offroad/@-27.570343,153.034816,14z/data=!4m5!3m4!1s0x0:0x97db09b6b9337e0e!8m2!3d-27.5703435!4d153.034816?hl=en" target="_blank" rel="noopener noreferrer"><img src="https://cdn.shopify.com/s/files/1/0650/1829/8612/files/location-icons.png"> Store Locator</a></li>
+            <li><a href="tel:0731039541"><img src="https://cdn.shopify.com/s/files/1/0650/1829/8612/files/call.png"> Contact us: (07) 3103 9541</a></li>
+          </ul>
+           {% comment %}<ul class="social-sec-head">
+            <li><a href="#"><img src="https://cdn.shopify.com/s/files/1/0650/1829/8612/files/fb.png"></a></li>
+            <li><a href="#"><img src="https://cdn.shopify.com/s/files/1/0650/1829/8612/files/youtube.png"></a></li>
+            <li><a href="#"><img src="https://cdn.shopify.com/s/files/1/0650/1829/8612/files/insta.png"></a></li>
+          </ul>{% endcomment %} 
+        </div>
+      </div>
+    </header>
+
+
+
+
+<script>
+  
+jQuery('.cart-items ').click(function () {
+  jQuery('.themevale_cart').toggleClass('open-dropdown');
+});
+
+
+jQuery('.search-main ').click(function () {
+  jQuery('.mobile-search-menu').toggleClass('open-dropdown');
+});
+
+
+jQuery('.menu-open ').click(function () {
+  jQuery('body').addClass('open-main-menu');
+});
+
+jQuery('.menu-close').click(function () {
+  jQuery('body').removeClass('open-main-menu');
+});
+
+
+jQuery('.submenu-btn').click(function () {
+  var data_id = $(this).attr("data-id");
+  jQuery('.in-menu-item li#first-'+data_id).addClass('open-main-menu');
+});
+
+jQuery('.close-submenu').click(function () {
+  var data_id = $(this).attr("data-id");
+  jQuery('.in-menu-item li#first-'+data_id).removeClass('open-main-menu');
+});
+
+
+jQuery('.first-submenu ').click(function () {
+  jQuery('header').toggleClass('fixed-submenu');
+});
+
+jQuery('.drive-menu').click(function () {
+  
+  jQuery('.single-banner-filter .filter').toggle();
+});
+  
+  
+</script>
+

@@ -1,0 +1,45 @@
+{%- liquid
+  if settings.page_layout == 'boxed'
+   assign is_boxed = true
+  endif
+-%}
+
+{%- if settings.blog_enable_sidebar -%}
+
+  {%- capture blog_sidebar -%}
+    <div class="col-3">
+      {%- section 'sidebar-blog' -%}
+    </div>
+  {%- endcapture -%}
+  {%- assign col_9 = 'col-lg-9' -%}
+{%- endif -%}
+
+<div class="page page-blog">
+  <div class="page_wrapper">
+  {%- if is_boxed -%} <div class="container"> {%- endif -%}
+    <h1 class="blog-title">{{blog.title}}</h1>
+    <div class="row">
+      {%- case template.suffix -%}
+        {%- when 'no-sidebar' -%}
+          <div class="col-12">
+            {%- section 'blog-template' -%}
+          </div>
+
+        {%- when 'left-sidebar' -%}
+
+          {{blog_sidebar}}
+
+          <div class="col-12 {{col_9}}">
+            {%- section 'blog-template' -%}
+          </div>
+
+        {%- else -%}
+          <div class="col-12 {{col_9}}">
+            {%- section 'blog-template' -%}
+          </div>
+          {{blog_sidebar}}
+      {%- endcase -%}
+    </div>
+  {%- if is_boxed -%} </div> {%- endif -%}
+  </div>
+</div>
